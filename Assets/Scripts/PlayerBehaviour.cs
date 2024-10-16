@@ -51,6 +51,7 @@ public class PlayerBehaviour : MonoBehaviour
         if(Input.GetButtonDown("Jump"))
         {
             physics.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            animatorControl.SetBool("IsJumping", true);
             onGround = false;
         }
     }
