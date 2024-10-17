@@ -47,7 +47,7 @@ public class CollectableBehaviou : MonoBehaviour
 
     IEnumerator AwaitAnimation (GameObject gameObject)
     {
-        yield return new WaitUntil(collectableAnimator.GetBool("IsCollected"))
+        yield return new WaitUntil(collectableAnimator.GetBool("IsCollected"));
     }
 
 }
