@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class CollectableBehaviou : MonoBehaviour
 {
@@ -10,12 +11,14 @@ public class CollectableBehaviou : MonoBehaviour
     public CircleCollider2D collectableCollider;
     public SpriteRenderer collectableSprite;
     public GameObject collectable;
+    ScoreManager _scoreManager;
 
     public float speed = 1f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _scoreManager = FindAnyObjectByType<ScoreManager>();
+        _scoreManager.AddCollectable();
     }
 
     // Update is called once per frame
@@ -28,7 +31,9 @@ public class CollectableBehaviou : MonoBehaviour
     {
         if(collider2D.gameObject.CompareTag("Player"))
         {
-            collectableAnimator.SetBool("IsCollected", true);
+            collectableAnimator.SetTrigger("Collected");
+            _scoreManager.IncreaseScore();
+            StartCoroutine(DestroyCollectable());
         }
     }
 
@@ -37,17 +42,10 @@ public class CollectableBehaviou : MonoBehaviour
         DestroyCollectable();
     }
 
-    void DestroyCollectable()
+    public IEnumerator DestroyCollectable()
     {
-        if(collectableAnimator.GetBool("IsCollected") == true)
-        {
-            Destroy(collectable.gameObject);
-        }
-    }
-
-    IEnumerator AwaitAnimation (GameObject gameObject)
-    {
-        yield return new WaitUntil(collectableAnimator.GetBool("IsCollected"));
+        yield return new WaitForSeconds(.5f);
+        Destroy(this.gameObject);
     }
 
 }
